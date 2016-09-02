@@ -9,6 +9,8 @@ ENV PANDOC_VERSION "1.16.0.2"
 # install pandoc
 RUN cabal update && cabal install pandoc-${PANDOC_VERSION}
 
+RUN cabal install pandoc-include
+
 # install latex packages
 RUN apt-get update -y \
   && apt-get install -y --no-install-recommends \
@@ -18,7 +20,15 @@ RUN apt-get update -y \
     texlive-latex-extra \
     texlive-fonts-extra \
     texlive-bibtex-extra \
-    fontconfig
+    fontconfig \
+    lmodern \
+    python2.7 python-pip
+
+RUN pip install pandocfilters
+
+ADD courier /usr/share/fonts/courier
+
+RUN fc-cache -fv
 
 WORKDIR /source
 
